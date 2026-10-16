@@ -9,6 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
+	"fmt"
 	"workshop/internal/domain/sighting"
 	"workshop/web/views/components"
 	"workshop/web/views/layout"
@@ -47,35 +48,149 @@ func Home(sightings []sighting.Sighting) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h1>Sightings</h1>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"hero\" id=\"hero\" aria-label=\"Hero\"><canvas class=\"hero__particles\" id=\"hero-particles\" aria-hidden=\"true\"></canvas><div class=\"hero__lion-wrap\" id=\"hero-lion-wrap\" aria-hidden=\"true\"><img class=\"hero__lion\" id=\"hero-lion\" src=\"/assets/images/lion-hero.jpg\" alt=\"\" width=\"900\" height=\"506\"><video class=\"hero__video\" id=\"hero-video\" poster=\"/assets/images/lion-hero.jpg\" muted playsinline loop preload=\"metadata\" aria-hidden=\"true\"><source src=\"/assets/videos/lion-roar.mp4\" type=\"video/mp4\"></video><div class=\"hero__pulse\" id=\"hero-pulse\" aria-hidden=\"true\"></div></div><svg class=\"hero__geo\" viewBox=\"0 0 260 273\" xmlns=\"http://www.w3.org/2000/svg\" role=\"group\" aria-labelledby=\"africa-map-title\"><title id=\"africa-map-title\">African wildlife sightings</title><image href=\"/assets/images/africa-outline.svg\" x=\"0\" y=\"0\" width=\"260\" height=\"273\"></image> <g id=\"africa-map-points\"></g></svg><div class=\"africa-map-caption\" aria-live=\"polite\"><span class=\"africa-map-caption__eyebrow\">AFRICA / FIELD NOTES</span> <strong><span id=\"africa-map-count\">0</span> loaded records</strong> <span id=\"africa-map-detail\">Select a light to explore a sighting</span></div><div class=\"hero__content\"><div class=\"hero__eyebrow\"><span class=\"hero__tag\">WILDLIFE FIELD RECORDS / AFRICA + BEYOND</span></div><h1 class=\"hero__title\"><span class=\"hero__title-line hero__title-line--1\">Wazalendo</span> <span class=\"hero__title-line hero__title-line--2\">The wild, observed.</span></h1><p class=\"hero__sub\">A living record of wildlife observations, gathered from GBIF and ready to explore.</p><div class=\"hero__actions\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if len(sightings) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p>No sightings have been ingested yet.</p>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<p>Total: ")
+			if len(sightings) > 0 {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<a href=\"#sightings\" class=\"btn btn--primary\" id=\"hero-cta\"><span>Explore ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var3 string
-				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(len(sightings))
+				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", len(sightings)))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/pages/home.templ`, Line: 17, Col: 29}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/pages/home.templ`, Line: 64, Col: 56}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</p><ul class=\"sightings\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " records</span> <span class=\"btn-arrow\" aria-hidden=\"true\">&#8595;</span></a> ")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<button class=\"btn btn--roar\" id=\"roar-btn\" type=\"button\" aria-pressed=\"false\"><svg class=\"roar-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M3 10v4h4l5 4V6l-5 4H3Z\"></path> <path d=\"M16 9a5 5 0 0 1 0 6M18.5 6.5a9 9 0 0 1 0 11\"></path></svg> <span>Make the lion roar</span></button> <button class=\"btn btn--motion\" id=\"motion-toggle\" type=\"button\" aria-pressed=\"false\">Pause motion</button></div><p class=\"visually-hidden\" id=\"roar-status\" aria-live=\"polite\"></p><div class=\"hero__stats\" aria-label=\"Statistics for loaded sightings\"><div class=\"stat-chip\"><span class=\"stat-chip__value\" id=\"stat-species\">-</span> <span class=\"stat-chip__label\">Species shown</span></div><div class=\"stat-chip\"><span class=\"stat-chip__value\" id=\"stat-countries\">-</span> <span class=\"stat-chip__label\">Countries shown</span></div><div class=\"stat-chip\"><span class=\"stat-chip__value\" id=\"stat-records\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", len(sightings)))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/pages/home.templ`, Line: 88, Col: 90}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</span> <span class=\"stat-chip__label\">Records loaded</span></div></div></div><div class=\"hero__scroll\" aria-hidden=\"true\"><span class=\"scroll-label\">Scroll</span><div class=\"scroll-bar\"><div class=\"scroll-thumb\"></div></div></div></section>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if len(sightings) == 0 {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<section class=\"empty-state\"><div class=\"empty-state__inner\"><span class=\"empty-icon\" aria-hidden=\"true\">&#127807;</span><h2>No sightings yet</h2><p>Run <code>go run . db seed</code> to ingest a starter set of records.</p></div></section>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			} else {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<section class=\"filter-bar\" aria-label=\"Filters\"><div class=\"filter-bar__inner\"><input class=\"filter-search\" id=\"filter-search\" type=\"search\" placeholder=\"Search species, location...\" aria-label=\"Search sightings\"><div class=\"filter-chips\" role=\"group\" aria-label=\"Filter by kingdom\"><button class=\"chip chip--active\" data-filter=\"all\" type=\"button\">All</button> <button class=\"chip\" data-filter=\"animalia\" type=\"button\">&#128062; Animals</button> <button class=\"chip\" data-filter=\"plantae\" type=\"button\">&#127807; Plants</button> <button class=\"chip\" data-filter=\"photo\" type=\"button\">&#128247; With Photo</button></div></div></section><section class=\"sightings-section\" id=\"sightings\" aria-label=\"Sightings grid\"><ul class=\"sightings-grid\" role=\"list\" id=\"sightings-grid\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				for _, s := range sightings {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<li>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<li data-kingdom=\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var5 string
+					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.ResolveAttributeValue(s.Species.Kingdom)
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/pages/home.templ`, Line: 128, Col: 39}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" data-species=\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var6 string
+					templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.ResolveAttributeValue(speciesKey(s))
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/pages/home.templ`, Line: 129, Col: 35}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\" data-country=\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var7 string
+					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.ResolveAttributeValue(s.Location.Country)
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/pages/home.templ`, Line: 130, Col: 40}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" data-latitude=\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var8 string
+					templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("%.1f", s.Location.Latitude))
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/pages/home.templ`, Line: 131, Col: 63}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var8)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" data-longitude=\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var9 string
+					templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("%.1f", s.Location.Longitude))
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/pages/home.templ`, Line: 132, Col: 65}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\" data-has-photo=\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var10 string
+					templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.ResolveAttributeValue(hasPhoto(s))
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/pages/home.templ`, Line: 133, Col: 35}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var10)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" data-name=\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var11 string
+					templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.ResolveAttributeValue(s.Species.VernacularName + " " + s.Species.ScientificName + " " + s.Location.Country)
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/pages/home.templ`, Line: 134, Col: 103}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var11)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -83,26 +198,47 @@ func Home(sightings []sighting.Sighting) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</li>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</li>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</ul>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</ul><p class=\"no-results\" id=\"no-results\" hidden>No sightings match your filter.</p></section>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, " <section class=\"about-section\" id=\"about\" aria-label=\"About Wazalendo\"><div class=\"about-inner\"><h2 class=\"about-title\">About Wazalendo</h2><p class=\"about-body\"><strong>Wazalendo</strong> - Swahili for <em>defenders of the land</em> - is a wildlife sightings platform honouring Africa&apos;s extraordinary biodiversity. Every record here was observed, photographed, and submitted by citizen scientists through the Global Biodiversity Information Facility (GBIF).</p><p class=\"about-body\">Built at GopherCon Africa 2026 using Go, templ, and SQLite - fast, lean, and open source.</p></div></section>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 			return nil
 		})
 		templ_7745c5c3_Err = layout.Base(layout.BaseProps{
-			Title: "Sightings",
+			Title:       "Sightings",
+			Description: "Browse African wildlife sightings from across the continent - species details, location data, weather and photographs. Powered by GBIF.",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		return nil
 	})
+}
+
+func hasPhoto(s sighting.Sighting) string {
+	for _, m := range s.Media {
+		if m.Type == "StillImage" && m.URL != "" {
+			return "true"
+		}
+	}
+	return "false"
+}
+
+func speciesKey(s sighting.Sighting) string {
+	if s.Species.ScientificName != "" {
+		return s.Species.ScientificName
+	}
+	return s.Species.VernacularName
 }
 
 var _ = templruntime.GeneratedTemplate

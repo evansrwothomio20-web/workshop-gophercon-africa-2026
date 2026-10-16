@@ -7,9 +7,11 @@ import (
 
 templ Error(message string, code int) {
 	@layout.Base(layout.BaseProps{
-		Title: "Error " + strconv.Itoa(code),
+		Title: strconv.Itoa(code) + " Error",
 	}) {
-		<h1>{ strconv.Itoa(code) }</h1>
-		<p>{ message }</p>
+		<section class="error-page">
+			<p class="error-code">{ strconv.Itoa(code) }</p>
+			<p class="error-message">{ message }</p>
+		</section>
 	}
 }

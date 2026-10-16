@@ -109,6 +109,16 @@ Each of `internal/{domain,clients,infra,common}` has a README saying where its l
    make web
    ```
 
+## Deploy on Render
+
+Create a **Web Service** for this repository and select the **Docker** runtime. Leave the
+Dockerfile build and start commands unset so Render uses the root `Dockerfile`. The image serves
+static assets from the binary and listens on Render's `PORT`.
+
+If you deploy with a native Go runtime instead, set `APP_ENV=production` and use `go run . web`
+as the start command. The Docker image does not include the source `web/` directory, so omitting
+the production environment setting makes its styles and other static assets unavailable.
+
 ## During the day
 
 ```sh

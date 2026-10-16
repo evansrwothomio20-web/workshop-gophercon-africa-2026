@@ -1,6 +1,7 @@
 package pages
 
 import (
+	"fmt"
 	"workshop/internal/domain/sighting"
 	"workshop/web/views/components"
 	"workshop/web/views/layout"
@@ -8,20 +9,163 @@ import (
 
 templ Home(sightings []sighting.Sighting) {
 	@layout.Base(layout.BaseProps{
-		Title: "Sightings",
+		Title:       "Sightings",
+		Description: "Browse African wildlife sightings from across the continent - species details, location data, weather and photographs. Powered by GBIF.",
 	}) {
-		<h1>Sightings</h1>
+		<section class="hero" id="hero" aria-label="Hero">
+			<canvas class="hero__particles" id="hero-particles" aria-hidden="true"></canvas>
+			<div class="hero__lion-wrap" id="hero-lion-wrap" aria-hidden="true">
+				<img
+					class="hero__lion"
+					id="hero-lion"
+					src="/assets/images/lion-hero.jpg"
+					alt=""
+					width="900"
+					height="506"
+				/>
+				<video
+					class="hero__video"
+					id="hero-video"
+					poster="/assets/images/lion-hero.jpg"
+					muted
+					playsinline
+					loop
+					preload="metadata"
+					aria-hidden="true"
+				>
+					<source src="/assets/videos/lion-roar.mp4" type="video/mp4"/>
+				</video>
+				<div class="hero__pulse" id="hero-pulse" aria-hidden="true"></div>
+			</div>
+			<svg class="hero__geo" viewBox="0 0 260 273" xmlns="http://www.w3.org/2000/svg" role="group" aria-labelledby="africa-map-title">
+				<title id="africa-map-title">African wildlife sightings</title>
+				<image href="/assets/images/africa-outline.svg" x="0" y="0" width="260" height="273"/>
+				<g id="africa-map-points"></g>
+			</svg>
+			<div class="africa-map-caption" aria-live="polite">
+				<span class="africa-map-caption__eyebrow">AFRICA / FIELD NOTES</span>
+				<strong><span id="africa-map-count">0</span> loaded records</strong>
+				<span id="africa-map-detail">Select a light to explore a sighting</span>
+			</div>
+			<div class="hero__content">
+				<div class="hero__eyebrow">
+					<span class="hero__tag">WILDLIFE FIELD RECORDS / AFRICA + BEYOND</span>
+				</div>
+				<h1 class="hero__title">
+					<span class="hero__title-line hero__title-line--1">Wazalendo</span>
+					<span class="hero__title-line hero__title-line--2">The wild, observed.</span>
+				</h1>
+				<p class="hero__sub">
+					A living record of wildlife observations, gathered from GBIF and ready to explore.
+				</p>
+				<div class="hero__actions">
+					if len(sightings) > 0 {
+						<a href="#sightings" class="btn btn--primary" id="hero-cta">
+							<span>Explore { fmt.Sprintf("%d", len(sightings)) } records</span>
+							<span class="btn-arrow" aria-hidden="true">&#8595;</span>
+						</a>
+					}
+					<button class="btn btn--roar" id="roar-btn" type="button" aria-pressed="false">
+						<svg class="roar-icon" viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M3 10v4h4l5 4V6l-5 4H3Z"/>
+							<path d="M16 9a5 5 0 0 1 0 6M18.5 6.5a9 9 0 0 1 0 11"/>
+						</svg>
+						<span>Make the lion roar</span>
+					</button>
+					<button class="btn btn--motion" id="motion-toggle" type="button" aria-pressed="false">Pause motion</button>
+				</div>
+				<p class="visually-hidden" id="roar-status" aria-live="polite"></p>
+				<div class="hero__stats" aria-label="Statistics for loaded sightings">
+					<div class="stat-chip">
+						<span class="stat-chip__value" id="stat-species">-</span>
+						<span class="stat-chip__label">Species shown</span>
+					</div>
+					<div class="stat-chip">
+						<span class="stat-chip__value" id="stat-countries">-</span>
+						<span class="stat-chip__label">Countries shown</span>
+					</div>
+					<div class="stat-chip">
+						<span class="stat-chip__value" id="stat-records">{ fmt.Sprintf("%d", len(sightings)) }</span>
+						<span class="stat-chip__label">Records loaded</span>
+					</div>
+				</div>
+			</div>
+			<div class="hero__scroll" aria-hidden="true">
+				<span class="scroll-label">Scroll</span>
+				<div class="scroll-bar"><div class="scroll-thumb"></div></div>
+			</div>
+		</section>
 		if len(sightings) == 0 {
-			<p>No sightings have been ingested yet.</p>
+			<section class="empty-state">
+				<div class="empty-state__inner">
+					<span class="empty-icon" aria-hidden="true">&#127807;</span>
+					<h2>No sightings yet</h2>
+					<p>Run <code>go run . db seed</code> to ingest a starter set of records.</p>
+				</div>
+			</section>
 		} else {
-			<p>Total: { len(sightings) }</p>
-			<ul class="sightings">
-				for _, s := range sightings {
-					<li>
-						@components.SightingCard(s)
-					</li>
-				}
-			</ul>
+			<section class="filter-bar" aria-label="Filters">
+				<div class="filter-bar__inner">
+					<input
+						class="filter-search"
+						id="filter-search"
+						type="search"
+						placeholder="Search species, location..."
+						aria-label="Search sightings"
+					/>
+					<div class="filter-chips" role="group" aria-label="Filter by kingdom">
+						<button class="chip chip--active" data-filter="all" type="button">All</button>
+						<button class="chip" data-filter="animalia" type="button">&#128062; Animals</button>
+						<button class="chip" data-filter="plantae" type="button">&#127807; Plants</button>
+						<button class="chip" data-filter="photo" type="button">&#128247; With Photo</button>
+					</div>
+				</div>
+			</section>
+			<section class="sightings-section" id="sightings" aria-label="Sightings grid">
+				<ul class="sightings-grid" role="list" id="sightings-grid">
+					for _, s := range sightings {
+						<li
+							data-kingdom={ s.Species.Kingdom }
+							data-species={ speciesKey(s) }
+							data-country={ s.Location.Country }
+							data-latitude={ fmt.Sprintf("%.1f", s.Location.Latitude) }
+							data-longitude={ fmt.Sprintf("%.1f", s.Location.Longitude) }
+							data-has-photo={ hasPhoto(s) }
+							data-name={ s.Species.VernacularName + " " + s.Species.ScientificName + " " + s.Location.Country }
+						>
+							@components.SightingCard(s)
+						</li>
+					}
+				</ul>
+				<p class="no-results" id="no-results" hidden>No sightings match your filter.</p>
+			</section>
+		}
+		<section class="about-section" id="about" aria-label="About Wazalendo">
+			<div class="about-inner">
+				<h2 class="about-title">About Wazalendo</h2>
+				<p class="about-body">
+					<strong>Wazalendo</strong> - Swahili for <em>defenders of the land</em> - is a wildlife sightings platform honouring Africa&apos;s extraordinary biodiversity. Every record here was observed, photographed, and submitted by citizen scientists through the Global Biodiversity Information Facility (GBIF).
+				</p>
+				<p class="about-body">
+					Built at GopherCon Africa 2026 using Go, templ, and SQLite - fast, lean, and open source.
+				</p>
+			</div>
+		</section>
+	}
+}
+
+func hasPhoto(s sighting.Sighting) string {
+	for _, m := range s.Media {
+		if m.Type == "StillImage" && m.URL != "" {
+			return "true"
 		}
 	}
+	return "false"
+}
+
+func speciesKey(s sighting.Sighting) string {
+	if s.Species.ScientificName != "" {
+		return s.Species.ScientificName
+	}
+	return s.Species.VernacularName
 }

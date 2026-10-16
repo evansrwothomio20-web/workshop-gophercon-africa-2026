@@ -1,23 +1,67 @@
 package layout
 
 type BaseProps struct {
-	Title string
+	Title       string
+	Description string
 }
 
 templ Base(props BaseProps) {
 	<!DOCTYPE html>
-	<html lang="en-GB">
+	<html lang="en">
 		<head>
 			<meta charset="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<title>{ props.Title }</title>
+			<title>{ props.Title } - Wazalendo</title>
+			if props.Description != "" {
+				<meta name="description" content={ props.Description }/>
+			} else {
+				<meta name="description" content="Wazalendo - Africa's premier wildlife sightings platform, powered by GBIF."/>
+			}
+			<meta name="theme-color" content="#f4f5ec"/>
+			<link rel="preconnect" href="https://fonts.googleapis.com"/>
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+			<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400&display=swap"/>
 			<link rel="stylesheet" href="/assets/css/app.css"/>
 		</head>
 		<body>
-			<main class="container">
+			<a class="skip-link" href="#main-content">Skip to content</a>
+			<header class="site-header" id="site-header">
+				<div class="header-inner">
+					<a class="site-logo" href="/" aria-label="Wazalendo home">
+						<span class="logo-paw" aria-hidden="true">
+							<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<ellipse cx="7" cy="8" rx="3" ry="4" fill="#a6d629"/>
+								<ellipse cx="14" cy="5" rx="3" ry="4" fill="#a6d629"/>
+								<ellipse cx="21" cy="8" rx="3" ry="4" fill="#a6d629"/>
+								<ellipse cx="4" cy="14" rx="2.5" ry="3.5" fill="#a6d629"/>
+								<ellipse cx="14" cy="20" rx="8" ry="7" fill="#a6d629"/>
+							</svg>
+						</span>
+						<span class="logo-text">Wazalendo</span>
+					</a>
+					<nav class="site-nav" aria-label="Main navigation">
+						<a href="/" class="nav-link">Sightings</a>
+						<a href="#about" class="nav-link">About</a>
+					</nav>
+				</div>
+			</header>
+			<main class="main-content" id="main-content">
 				{ children... }
 			</main>
-			<script src="/assets/js/app.js"></script>
+			<footer class="site-footer">
+				<div class="footer-inner">
+					<div class="footer-brand">
+						<span class="footer-logo">Wazalendo</span>
+						<p class="footer-tagline">Africa&apos;s wildlife. Documented.</p>
+					</div>
+					<div class="footer-links">
+						<p>Data from <a href="https://www.gbif.org" rel="noopener noreferrer" target="_blank">GBIF</a>. Photographs remain the property of their creators.</p>
+						<p>Hero video: AI-generated clip by <a href="https://www.vecteezy.com/members/fendiefendi32" rel="noopener noreferrer" target="_blank">SLAMET EFENDI</a> via <a href="https://www.vecteezy.com/video/74611862-majestic-lion-roaring-in-natural-savannah-landscape-during-golden-hour" rel="noopener noreferrer" target="_blank">Vecteezy</a> (Free License).</p>
+						<p>Built with <a href="https://templ.guide" rel="noopener noreferrer" target="_blank">templ</a> &amp; Go - GopherCon Africa 2026.</p>
+					</div>
+				</div>
+			</footer>
+			<script src="/assets/js/app.js" defer></script>
 		</body>
 	</html>
 }

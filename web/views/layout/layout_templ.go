@@ -9,7 +9,8 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 type BaseProps struct {
-	Title string
+	Title       string
+	Description string
 }
 
 func Base(props BaseProps) templ.Component {
@@ -33,20 +34,48 @@ func Base(props BaseProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en-GB\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(props.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/layout/layout.templ`, Line: 13, Col: 23}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/layout/layout.templ`, Line: 14, Col: 23}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><link rel=\"stylesheet\" href=\"/assets/css/app.css\"></head><body><main class=\"container\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " - Wazalendo</title>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if props.Description != "" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<meta name=\"description\" content=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.ResolveAttributeValue(props.Description)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/views/layout/layout.templ`, Line: 16, Col: 56}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		} else {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<meta name=\"description\" content=\"Wazalendo - Africa's premier wildlife sightings platform, powered by GBIF.\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<meta name=\"theme-color\" content=\"#f4f5ec\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400&display=swap\"><link rel=\"stylesheet\" href=\"/assets/css/app.css\"></head><body><a class=\"skip-link\" href=\"#main-content\">Skip to content</a><header class=\"site-header\" id=\"site-header\"><div class=\"header-inner\"><a class=\"site-logo\" href=\"/\" aria-label=\"Wazalendo home\"><span class=\"logo-paw\" aria-hidden=\"true\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 28 28\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"7\" cy=\"8\" rx=\"3\" ry=\"4\" fill=\"#a6d629\"></ellipse> <ellipse cx=\"14\" cy=\"5\" rx=\"3\" ry=\"4\" fill=\"#a6d629\"></ellipse> <ellipse cx=\"21\" cy=\"8\" rx=\"3\" ry=\"4\" fill=\"#a6d629\"></ellipse> <ellipse cx=\"4\" cy=\"14\" rx=\"2.5\" ry=\"3.5\" fill=\"#a6d629\"></ellipse> <ellipse cx=\"14\" cy=\"20\" rx=\"8\" ry=\"7\" fill=\"#a6d629\"></ellipse></svg></span> <span class=\"logo-text\">Wazalendo</span></a><nav class=\"site-nav\" aria-label=\"Main navigation\"><a href=\"/\" class=\"nav-link\">Sightings</a> <a href=\"#about\" class=\"nav-link\">About</a></nav></div></header><main class=\"main-content\" id=\"main-content\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -54,7 +83,7 @@ func Base(props BaseProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</main><script src=\"/assets/js/app.js\"></script></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</main><footer class=\"site-footer\"><div class=\"footer-inner\"><div class=\"footer-brand\"><span class=\"footer-logo\">Wazalendo</span><p class=\"footer-tagline\">Africa&apos;s wildlife. Documented.</p></div><div class=\"footer-links\"><p>Data from <a href=\"https://www.gbif.org\" rel=\"noopener noreferrer\" target=\"_blank\">GBIF</a>. Photographs remain the property of their creators.</p><p>Hero video: AI-generated clip by <a href=\"https://www.vecteezy.com/members/fendiefendi32\" rel=\"noopener noreferrer\" target=\"_blank\">SLAMET EFENDI</a> via <a href=\"https://www.vecteezy.com/video/74611862-majestic-lion-roaring-in-natural-savannah-landscape-during-golden-hour\" rel=\"noopener noreferrer\" target=\"_blank\">Vecteezy</a> (Free License).</p><p>Built with <a href=\"https://templ.guide\" rel=\"noopener noreferrer\" target=\"_blank\">templ</a> &amp; Go - GopherCon Africa 2026.</p></div></div></footer><script src=\"/assets/js/app.js\" defer></script></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

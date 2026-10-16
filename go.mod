@@ -17,7 +17,6 @@ require (
 	github.com/urfave/cli/v3 v3.13.0
 	modernc.org/sqlite v1.59.0
 )
-
 require (
 	cel.dev/expr v0.25.2 // indirect
 	filippo.io/edwards25519 v1.2.0 // indirect

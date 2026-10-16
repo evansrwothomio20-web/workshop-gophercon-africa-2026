@@ -14,9 +14,9 @@ templ Gallery(items []sighting.Media) {
 				<!-- Items -->
 				<li class="gallery__item">
 					if m.Type == "StillImage" {
-						<img src={ m.URL } alt={ altText(m) } loading="lazy"/>
+						<img src={ m.URL } alt={ mediaAltText(m) } loading="lazy"/>
 					} else {
-						<a href={ templ.URL(m.URL) } rel="noopener">{ altText(m) }</a>
+						<a href={ templ.URL(m.URL) } rel="noopener">{ mediaAltText(m) }</a>
 					}
 					if m.Creator != "" {
 						<figcaption class="gallery__credit">{ m.Creator }</figcaption>
@@ -27,6 +27,6 @@ templ Gallery(items []sighting.Media) {
 	}
 }
 
-func altText(m sighting.Media) string {
+func mediaAltText(m sighting.Media) string {
 	return cmp.Or(m.Title, m.Description, "Sighting media")
 }

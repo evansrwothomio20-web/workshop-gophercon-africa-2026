@@ -12,37 +12,72 @@ import (
 
 templ SightingCard(s sighting.Sighting) {
 	<article class="card">
-		<!-- Header -->
-		<header class="card__header">
-			<h2>{ displayName(s.Species) }</h2>
-			if s.Species.ScientificName != "" {
-				<p class="card__scientific">{ s.Species.ScientificName }</p>
+		@plate(s)
+		<div class="card__body">
+			<header class="card__header">
+				<h2 class="card__name">{ displayName(s.Species) }</h2>
+				if s.Species.ScientificName != "" {
+					<p class="card__scientific"><em>{ s.Species.ScientificName }</em></p>
+				}
+			</header>
+			<dl class="card__meta">
+				<div class="meta-row">
+					<dt>Seen</dt>
+					<dd><time datetime={ s.HappenedAt.Format("2006-01-02") }>{ s.HappenedAt.Format("2 Jan 2006") }</time></dd>
+				</div>
+				<div class="meta-row">
+					<dt>Where</dt>
+					<dd>{ place(s.Location) }</dd>
+				</div>
+				if s.IndividualCount != nil {
+					<div class="meta-row">
+						<dt>Count</dt>
+						<dd>{ individuals(*s.IndividualCount) }</dd>
+					</div>
+				}
+				if s.RecordedBy != "" {
+					<div class="meta-row">
+						<dt>Observer</dt>
+						<dd>{ s.RecordedBy }</dd>
+					</div>
+				}
+				if s.Weather.Condition.Description != "" {
+					<div class="meta-row">
+						<dt>Weather</dt>
+						<dd class="weather-badge">
+							<span class="weather-icon">{ weatherIcon(s.Weather.Condition.Code) }</span>
+							{ s.Weather.Condition.Description }
+							if s.Weather.Temperature.Actual != 0 {
+								<span class="weather-temp">{ fmt.Sprintf("%.0f°C", s.Weather.Temperature.Actual) }</span>
+							}
+						</dd>
+					</div>
+				}
+			</dl>
+			if s.ReferenceURL != "" {
+				<a class="card__link" href={ templ.URL(s.ReferenceURL) } rel="noopener noreferrer" target="_blank">
+					View on GBIF
+					<span aria-hidden="true">?</span>
+				</a>
 			}
-		</header>
-		<!-- Meta -->
-		<dl class="card__meta">
-			<dt>Seen</dt>
-			<dd>{ s.HappenedAt.Format("2 January 2006") }</dd>
-			<dt>Where</dt>
-			<dd>{ place(s.Location) }</dd>
-			if s.IndividualCount != nil {
-				<dt>Count</dt>
-				<dd>{ individuals(*s.IndividualCount) }</dd>
-			}
-			if s.RecordedBy != "" {
-				<dt>Recorded by</dt>
-				<dd>{ s.RecordedBy }</dd>
-			}
-		</dl>
-		<!-- Gallery -->
-		<div class="card__gallery">
-			@Gallery(s.Media)
 		</div>
 	</article>
 }
 
-// displayName prefers the name a reader would recognise, falling back
-// through the taxonomy as GBIF records thin out.
+// plate is the first photograph on a sighting.
+templ plate(s sighting.Sighting) {
+	<figure class="card__plate">
+		if url := thumbnail(s); url != "" {
+			<img src={ url } alt={ altText(s) } loading="lazy" decoding="async"/>
+		} else {
+			<div class="card__noplate" role="img" aria-label={ "No photograph for " + displayName(s.Species) }>
+				<span aria-hidden="true">{ speciesEmoji(s.Species) }</span>
+			</div>
+		}
+	</figure>
+}
+
+// displayName prefers the name a reader would recognise.
 func displayName(sp species.Species) string {
 	return cmp.Or(sp.VernacularName, sp.CanonicalName, sp.ScientificName, "Unknown species")
 }
@@ -56,10 +91,68 @@ func place(l sighting.Location) string {
 	return cmp.Or(strings.Join(parts, ", "), "Location unknown")
 }
 
-// individuals renders how many animals were seen in a single sighting.
+// individuals renders how many animals were seen.
 func individuals(n int) string {
 	if n == 1 {
 		return "1 individual"
 	}
 	return fmt.Sprintf("%d individuals", n)
+}
+
+// thumbnail returns the first still image URL on a sighting.
+func thumbnail(s sighting.Sighting) string {
+	for _, m := range s.Media {
+		if m.Type == "StillImage" && m.URL != "" {
+			return m.URL
+		}
+	}
+	return ""
+}
+
+// altText describes the sighting for screen readers.
+func altText(s sighting.Sighting) string {
+	return fmt.Sprintf("%s photographed at %s on %s",
+		displayName(s.Species), place(s.Location), s.HappenedAt.Format("2 January 2006"))
+}
+
+// speciesEmoji picks a rough emoji for the species kingdom.
+func speciesEmoji(sp species.Species) string {
+	switch strings.ToLower(sp.Kingdom) {
+	case "animalia":
+		switch strings.ToLower(sp.Class) {
+		case "aves":
+			return "??"
+		case "mammalia":
+			return "??"
+		case "actinopterygii", "chondrichthyes":
+			return "??"
+		case "reptilia":
+			return "??"
+		}
+		return "??"
+	case "plantae":
+		return "??"
+	}
+	return "??"
+}
+
+// weatherIcon maps WMO weather codes to emoji.
+func weatherIcon(code int) string {
+	switch {
+	case code == 0:
+		return "??"
+	case code <= 3:
+		return "?"
+	case code <= 49:
+		return "???"
+	case code <= 67:
+		return "???"
+	case code <= 77:
+		return "??"
+	case code <= 82:
+		return "???"
+	case code <= 99:
+		return "??"
+	}
+	return "???"
 }

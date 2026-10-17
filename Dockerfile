@@ -5,9 +5,9 @@ WORKDIR /src
 COPY . .
 RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/workshop .
 
-# Migrate the committed database, or create an empty one if nothing was
-# committed, since the web command refuses to start with pending migrations.
-RUN /out/workshop --db file:/src/workshop.db db migrate up
+# Seed the bundled database before it is copied into the runtime image.
+# db seed uses the local mock API, whose source and dataset are in the build context.
+RUN /out/workshop --db file:/src/workshop.db db seed
 
 FROM gcr.io/distroless/static-debian12
 WORKDIR /app
@@ -18,8 +18,6 @@ COPY --from=build /src/workshop.db /app/workshop.db
 ENV APP_ENV=production \
 	PORT=8080 \
 	DB_URI=file:/app/workshop.db
-
-CMD go run . db seed
 
 EXPOSE 8080
 ENTRYPOINT ["/app/workshop", "web"]

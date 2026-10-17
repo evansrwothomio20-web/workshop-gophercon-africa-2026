@@ -8,7 +8,6 @@ Dockerfile
 .env
 .env.*
 !.env.example
-cmd/mockapi/
 architectures/
 tools/
 .claude/

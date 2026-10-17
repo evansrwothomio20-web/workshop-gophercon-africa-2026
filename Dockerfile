@@ -19,5 +19,7 @@ ENV APP_ENV=production \
 	PORT=8080 \
 	DB_URI=file:/app/workshop.db
 
+CMD go run . db seed
+
 EXPOSE 8080
 ENTRYPOINT ["/app/workshop", "web"]
